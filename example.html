@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sorting Visualizer</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      display: flex;
+      gap: 1px;
+    }
+
+    .bar {
+      background-color: #4287f5;
+      width: 10px;
+      height: 5px;
+      transition: height 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="container"></div>
+
+  <script>
+    // Generate an array of random numbers
+    function generateArray(size, min, max) {
+      const array = [];
+      for (let i = size; i > 0; i--) {
+        array.push(Math.floor(Math.random() * (max - min + 1)) + min);
+      }
+      return array;
+    }
+
+    // Visualize the array
+    function visualizeArray(array) {
+      const container = document.querySelector('.container');
+      container.innerHTML = '';
+
+      for (let i = 0; i < array.length; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = array[i] + 'px';
+        container.appendChild(bar);
+      }
+    }
+
+    // Selection sort algorithm
+    async function selectionSort(array) {
+      const n = array.length;
+
+      for (let i = 0; i < n - 1; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < n; j++) {
+          if (array[j] < array[minIndex]) {
+            minIndex = j;
+          }
+        }
+
+        await swap(array, i, minIndex);
+      }
+    }
+
+    // Swap two elements in the array and update visualization
+    async function swap(array, i, j) {
+      await sleep(100);
+
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+
+      visualizeArray(array);
+    }
+
+    // Utility function to introduce delay
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Main function
+    async function main() {
+      const array = generateArray(50, 10, 200);
+      visualizeArray(array);
+      await selectionSort(array);
+    }
+
+    // Start the visualization
+    main();
+  </script>
+</body>
+</html>
